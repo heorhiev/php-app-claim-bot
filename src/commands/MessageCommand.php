@@ -8,7 +8,7 @@ use app\toolkit\components\validators\TextValidator;
 use app\toolkit\components\validators\PhoneValidator;
 use app\toolkit\services\SettingsService;
 use app\googleSheet\config\GoogleSheetDto;
-use app\googleSheet\googleSheets\UploadService;
+use app\googleSheet\GoogleSheet;
 
 
 
@@ -83,9 +83,11 @@ class MessageCommand extends \app\bot\Command
             'contact' => $this->getContact(),
         ]);
 
-        $service = new UploadService(SettingsService::load('vacancy/google_sheet', GoogleSheetDto::class));
+        $googleSheet = new GoogleSheet(
+            SettingsService::load('google_sheet', GoogleSheetDto::class)
+        );
 
-        $service->save([
+        $googleSheet->save([
             $this->getContact()->getAttributes(['id', 'name', 'phone'])
         ]);
     }
