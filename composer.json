@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "heorhiev\\php-app-claim-bot\\": "src"
+            "app\\claimBot\\": "src"
         }
     },
     "repositories": [

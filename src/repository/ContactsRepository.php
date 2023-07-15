@@ -1,8 +1,8 @@
 <?php
 
-namespace app\common\bots\vacancy\repository;
+namespace app\claimBot\repository;
 
-use app\common\components\repository\Repository;
+use app\toolkit\components\repository\Repository;
 
 
 class ContactsRepository extends Repository

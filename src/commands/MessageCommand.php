@@ -1,17 +1,23 @@
 <?php
 
-namespace app\common\bots\vacancy\commands;
+namespace app\claimBot\commands;
 
-use app\common\bots\vacancy\constants\VacancyBotConst;
-use app\common\components\validators\TextValidator;
-use app\common\components\validators\PhoneValidator;
-use app\common\dto\config\GoogleSheetDto;
-use app\common\services\googleSheets\UploadService;
-use app\common\services\SettingsService;
+use app\claimBot\constants\ClaimBotConst;
+use app\claimBot\entities\Contact;
+use app\toolkit\components\validators\TextValidator;
+use app\toolkit\components\validators\PhoneValidator;
+use app\toolkit\services\SettingsService;
+use app\googleSheet\config\GoogleSheetDto;
+use app\googleSheet\googleSheets\UploadService;
 
 
-class MessageCommand extends Command
+
+class MessageCommand extends \app\bot\Command
 {
+    /** @var Contact */
+    private $_contact;
+
+
     public function run(): void
     {
         if ($this->getMessage()->getContact() != null) {
@@ -35,10 +41,10 @@ class MessageCommand extends Command
 
             $this->getContact()->update([
                 'name' => $text,
-                'step' => VacancyBotConst::STEP_ENTER_PHONE,
+                'step' => ClaimBotConst::STEP_ENTER_PHONE,
             ]);
 
-            $key = VacancyBotConst::STEP_ENTER_PHONE;
+            $key = ClaimBotConst::STEP_ENTER_PHONE;
         } else {
             $key = $this->getContact()->step . '.error';
         }
@@ -61,13 +67,13 @@ class MessageCommand extends Command
         if ((new PhoneValidator())->isValid($text)) {
             $this->getContact()->update([
                 'phone' => $text,
-                'step' => VacancyBotConst::STEP_FINALE,
-                'status' => VacancyBotConst::CONTACT_STATUS_FINALE,
+                'step' => ClaimBotConst::STEP_FINALE,
+                'status' => ClaimBotConst::CONTACT_STATUS_FINALE,
             ]);
 
             $this->addButton();
 
-            $key = VacancyBotConst::STEP_FINALE;
+            $key = ClaimBotConst::STEP_FINALE;
         } else {
             $key = $this->getContact()->step . '.error';
         }
@@ -89,7 +95,7 @@ class MessageCommand extends Command
     {
         $this->addButton();
 
-        $this->getBot()->sendMessage($this->getUserId(), VacancyBotConst::STEP_FINALE, null, [
+        $this->getBot()->sendMessage($this->getUserId(), ClaimBotConst::STEP_FINALE, null, [
             'contact' => $this->getContact(),
             'phone' => $this->getContact()->phone,
         ]);
@@ -106,5 +112,15 @@ class MessageCommand extends Command
                 [['text' => $text, 'url' => $url]]
             ]);
         }
+    }
+
+
+    private function getContact(): ?Contact
+    {
+        if ($this->_contact === null) {
+            $this->_contact = Contact::repository()->findById($this->getUserId())->asEntityOne();
+        }
+
+        return $this->_contact;
     }
 }

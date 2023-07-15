@@ -1,9 +1,9 @@
 <?php
 
-namespace app\common\bots\vacancy\constants;
+namespace app\claimBot\constants;
 
 
-final class VacancyBotConst
+final class ClaimBotConst
 {
     const STEP_ENTER_NAME = 'enterName';
     const STEP_ENTER_PHONE = 'enterPhone';

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\common\bots\vacancy\entities;
+namespace app\claimBot\entities;
 
-use app\common\components\Entity;
-use app\common\components\repository\Repository;
-use app\common\bots\vacancy\repository\ContactsRepository;
+use app\toolkit\components\Entity;
+use app\toolkit\components\repository\Repository;
+use app\claimBot\repository\ContactsRepository;
 
 
 class Contact extends Entity

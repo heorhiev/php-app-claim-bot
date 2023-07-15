@@ -1,5 +1,5 @@
 <?php
-/** @var \app\common\bots\vacancy\entities\Contact $contact */
+/** @var \app\claimBot\entities\Contact $contact */
 ?>
 
 <?php echo $contact->name; ?>, cпасибо за проявленный интерес!
