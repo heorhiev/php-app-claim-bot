@@ -10,8 +10,8 @@
     "require": {
         "php": ">=7.2",
         "telegram-bot/api": "^2.4",
-        "heorhiiev/php-app-toolkit": "dev-master",
-        "heorhiiev/php-app-bot": "dev-master"
+        "heorhiev/php-app-toolkit": "dev-master",
+        "heorhiev/php-app-bot": "dev-master"
     },
     "require-dev": {
         "ext-sqlite3": "*"
