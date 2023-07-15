@@ -1,0 +1,37 @@
+{
+    "name": "heorhiev/php-app-claim-bot",
+    "authors": [
+        {
+            "name": "Ruslan",
+            "email": ""
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2",
+        "telegram-bot/api": "^2.4",
+        "heorhiiev/php-app-toolkit": "dev-master",
+        "heorhiiev/php-app-bot": "dev-master"
+    },
+    "require-dev": {
+        "ext-sqlite3": "*"
+    },
+    "extra": {
+        "bootstrap": "heorhiev\\php-app-claim-bot\\Bootstrap"
+    },
+    "autoload": {
+        "psr-4": {
+            "heorhiev\\php-app-claim-bot\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/heorhiev/php-app-toolkit.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/heorhiev/php-app-bot.git"
+        }
+    ]
+}
