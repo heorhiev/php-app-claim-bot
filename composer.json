@@ -11,7 +11,8 @@
         "php": ">=7.2",
         "telegram-bot/api": "^2.4",
         "heorhiev/php-app-toolkit": "dev-master",
-        "heorhiev/php-app-bot": "dev-master"
+        "heorhiev/php-app-bot": "dev-master",
+        "heorhiev/php-app-google-sheets": "dev-master"
     },
     "require-dev": {
         "ext-sqlite3": "*"
@@ -32,6 +33,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/heorhiev/php-app-bot.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/heorhiev/php-app-google-sheets.git"
         }
     ]
 }
