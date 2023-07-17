@@ -14,6 +14,7 @@ class Contact extends Entity
     public $step;
     public $phone;
     public $status;
+    public $created;
 
 
 
@@ -21,7 +22,7 @@ class Contact extends Entity
     {
         return [
             'integer' => ['id', 'status'],
-            'string' => ['name', 'step', 'phone'],
+            'string' => ['name', 'step', 'phone', 'created'],
         ];
     }
 

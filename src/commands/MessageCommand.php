@@ -85,12 +85,13 @@ class MessageCommand extends \app\bot\Command
         ]);
 
         $googleSheet = new GoogleSheet(
-            SettingsService::load('google_sheet', GoogleSheetDto::class)
+            SettingsService::load('claim/google_sheet', GoogleSheetDto::class)
         );
 
-        $googleSheet->save([
-            $this->getContact()->getAttributes(['id', 'name', 'phone'])
-        ]);
+        $data  = $this->getContact()->getAttributes(['id', 'name', 'phone']);
+        $data[] = date('Y-m-d H:i:s');
+
+        $googleSheet->save([$data]);
     }
 
 
