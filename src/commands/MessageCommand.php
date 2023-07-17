@@ -34,10 +34,11 @@ class MessageCommand extends \app\bot\Command
         $text = preg_replace('/[^a-zA-ZА-Яа-я0-9-\s$]/u', '', $text);
 
         if ((new TextValidator())->isValid($text)) {
+            $sendPhoneButton = array_merge($this->getBot()->getOptions()->buttons['sendPhone'], [
+                'request_contact' => true
+            ]);
 
-            $this->getBot()->setReplyKeyboardMarkup(
-                [[['text' => 'Отправить номер', 'request_contact' => true]]]
-            );
+            $this->getBot()->setReplyKeyboardMarkup([[$sendPhoneButton]]);
 
             $this->getContact()->update([
                 'name' => $text,
@@ -106,12 +107,9 @@ class MessageCommand extends \app\bot\Command
 
     private function addButton()
     {
-        if ($this->getBot()->getOptions()->vacancyBotFinaleUrl) {
-            $text = $this->getBot()->getOptions()->vacancyBotFinaleText;
-            $url = $this->getBot()->getOptions()->vacancyBotFinaleUrl;
-
+        if (!empty($this->getBot()->getOptions()->buttons['finale'])) {
             $this->getBot()->setInlineKeyboardMarkup([
-                [['text' => $text, 'url' => $url]]
+                [$this->getBot()->getOptions()->buttons['finale']]
             ]);
         }
     }
