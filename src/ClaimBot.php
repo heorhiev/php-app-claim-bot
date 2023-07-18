@@ -30,6 +30,6 @@ class ClaimBot extends Bot
 
     public static function getVewPath(string $view): string
     {
-        return COMMON_PATH . '/bots/vacancy/views/' . $view;
+        return '{@vendorPath}/heorhiev/php-app-claim-bot/src/views/' . $view;
     }
 }
