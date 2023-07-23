@@ -9,6 +9,6 @@ class ClaimBotController implements \app\toolkit\components\controllers\HttpCont
 {
     public function main()
     {
-        (new ClaimBot('claim/telegram'))->handler();
+        (new ClaimBot('claim/telegram'))->run();
     }
 }

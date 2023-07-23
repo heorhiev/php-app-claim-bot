@@ -11,7 +11,7 @@ use TelegramBot\Api\Types\Message;
 
 class ClaimBot extends Bot
 {
-    public function handler(): void
+    public function run(): void
     {
         $this->getBot()->command('start', function(Message $message) {
             (new StartCommand($this, $message))->run();
