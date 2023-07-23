@@ -19,7 +19,7 @@ class MessageCommand extends \app\bot\models\Command
 
     public function run(): void
     {
-        if ($this->getMessage()->getContact() != null) {
+        if ($this->getBot()->getIncomeMessage()->getContact() != null) {
             $this->enterPhone();
         } else {
             $this->{$this->getContact()->step}();

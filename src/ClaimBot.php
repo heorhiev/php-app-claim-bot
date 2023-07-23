@@ -27,9 +27,8 @@ class ClaimBot extends Bot
         $this->getBot()->run();
     }
 
-
-    public static function getVewPath(string $view): string
+    public static function getCommands(): array
     {
-        return '{@vendorPath}/heorhiev/php-app-claim-bot/src/views/' . $view;
+        return [];
     }
 }
