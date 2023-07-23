@@ -4,15 +4,14 @@ namespace app\claimBot\commands;
 
 use app\claimBot\constants\ClaimBotConst;
 use app\claimBot\entities\Contact;
-use app\toolkit\components\validators\TextValidator;
-use app\toolkit\components\validators\PhoneValidator;
-use app\toolkit\services\SettingsService;
 use app\googleSheet\config\GoogleSheetDto;
 use app\googleSheet\GoogleSheet;
+use app\toolkit\components\validators\PhoneValidator;
+use app\toolkit\components\validators\TextValidator;
+use app\toolkit\services\SettingsService;
 
 
-
-class MessageCommand extends \app\bot\Command
+class MessageCommand extends \app\bot\models\Command
 {
     /** @var Contact */
     private $_contact;

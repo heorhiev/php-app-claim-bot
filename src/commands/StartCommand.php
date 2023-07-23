@@ -6,7 +6,7 @@ use app\claimBot\constants\ClaimBotConst;
 use app\claimBot\entities\Contact;
 
 
-class StartCommand extends \app\bot\Command
+class StartCommand extends \app\bot\models\Command
 {
     public function run(): void
     {
