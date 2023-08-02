@@ -19,15 +19,19 @@ class StartCommand extends \app\bot\models\Command
             'status' => ClaimBotConst::CONTACT_STATUS_NEW
         ]);
 
-        $message = new Message($this->getBot()->getOptions());
-        $message->setMessageView(ClaimBotConst::STEP_ENTER_NAME);
+        $message = $this->getBot()->getNewMessage()->setMessageView(ClaimBotConst::STEP_ENTER_NAME);
 
         $userName = $this->getBot()->getIncomeMessage()->getSenderFullName();
 
         if ($userName) {
-            $message
-                ->setAttributes(['userName' => $userName])
-                ->setReplyKeyboardMarkup([[['text' => $userName]]]);
+            $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+                [[['text' => $userName]]],
+                true,
+                true,
+                true
+            );
+
+            $message->setKeyboardMarkup($keyboard)->setAttributes(['userName' => $userName]);
         }
 
         $this->getBot()->sendMessage($message);

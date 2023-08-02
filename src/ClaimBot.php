@@ -3,32 +3,29 @@
 namespace app\claimBot;
 
 use app\bot\Bot;
-use app\claimBot\commands\StartCommand;
-use app\claimBot\commands\MessageCommand;
-use TelegramBot\Api\Client;
-use TelegramBot\Api\Types\Message;
+use app\claimBot\commands\{StartCommand, MessageCommand};
 
 
 class ClaimBot extends Bot
 {
-    public function run(): void
-    {
-        $this->getBot()->command('start', function(Message $message) {
-            (new StartCommand($this, $message))->run();
-        });
-
-        //Handle text messages
-        $this->getBot()->on(function (\TelegramBot\Api\Types\Update $update) {
-            (new MessageCommand($this, $update->getMessage()))->run();
-        }, function () {
-            return true;
-        });
-
-        $this->getBot()->run();
-    }
+    private static $_commands = [
+        'start' => StartCommand::class,
+    ];
 
     public static function getCommands(): array
     {
-        return [];
+        return self::$_commands;
+    }
+
+
+    public function getTextHandler($text)
+    {
+        $class = parent::getTextHandler($text);
+
+        if (!$class) {
+            $class = MessageCommand::class;
+        }
+
+        return $class;
     }
 }

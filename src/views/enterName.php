@@ -1,7 +1,7 @@
 <?php
 /** @var string $userName */
 
-$hello = $userName ? 'Привет, ' . $userName : 'Привет';
+$hello = !empty($userName) ? 'Привет, ' . $userName : 'Привет';
 
 ?>
 

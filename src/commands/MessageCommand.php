@@ -8,6 +8,7 @@ use app\googleSheet\config\GoogleSheetDto;
 use app\googleSheet\GoogleSheet;
 use app\toolkit\components\validators\PhoneValidator;
 use app\toolkit\components\validators\TextValidator;
+use app\toolkit\services\LoggerService;
 use app\toolkit\services\SettingsService;
 
 
@@ -19,7 +20,7 @@ class MessageCommand extends \app\bot\models\Command
 
     public function run(): void
     {
-        if ($this->getBot()->getIncomeMessage()->getContact() != null) {
+        if ($this->getSendedContact() != null) {
             $this->enterPhone();
         } else {
             $this->{$this->getContact()->step}();
@@ -29,59 +30,77 @@ class MessageCommand extends \app\bot\models\Command
 
     public function enterName(): void
     {
-        $text = trim($this->getMessage()->getText());
+        $text = trim($this->getBot()->getIncomeMessage()->getText());
         $text = preg_replace('/[^a-zA-ZА-Яа-я0-9-\s$]/u', '', $text);
 
+        $message = $this->getBot()->getNewMessage();
+
         if ((new TextValidator())->isValid($text)) {
+            $step = ClaimBotConst::STEP_ENTER_PHONE;
+
             $sendPhoneButton = array_merge($this->getBot()->getOptions()->buttons['sendPhone'], [
                 'request_contact' => true
             ]);
 
-            $this->getBot()->setReplyKeyboardMarkup([[$sendPhoneButton]]);
+            $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+                [[$sendPhoneButton]],
+                true,
+                true,
+                true
+            );
 
-            $this->getContact()->update([
-                'name' => $text,
-                'step' => ClaimBotConst::STEP_ENTER_PHONE,
-            ]);
+            $message->setKeyboardMarkup($keyboard);
 
-            $key = ClaimBotConst::STEP_ENTER_PHONE;
+            $this->getContact()->update(['name' => $text, 'step' => $step]);
         } else {
-            $key = $this->getContact()->step . '.error';
+            $step = $this->getContact()->step . '.error';
         }
 
-        $this->getBot()->sendMessage($this->getUserId(), $key, null, [
+        $message = $message->setMessageView($step)->setAttributes([
             'userName' => $text,
             'contact' => $this->getContact(),
         ]);
+        
+        $this->getBot()->sendMessage($message);
     }
 
 
     public function enterPhone(): void
     {
-        if ($this->getMessage()->getContact() != null) {
-            $text = $this->getMessage()->getContact()->getPhoneNumber();
+        if ($this->getSendedContact() != null) {
+            $text = $this->getSendedContact()->getPhoneNumber();
         } else {
-            $text = trim($this->getMessage()->getText());
+            $text = trim($this->getBot()->getIncomeMessage()->getText());
         }
 
+        $message = $this->getBot()->getNewMessage();
+
         if ((new PhoneValidator())->isValid($text)) {
+            $step = ClaimBotConst::STEP_FINALE;
+
             $this->getContact()->update([
                 'phone' => $text,
-                'step' => ClaimBotConst::STEP_FINALE,
+                'step' => $step,
                 'status' => ClaimBotConst::CONTACT_STATUS_FINALE,
             ]);
 
-            $this->addButton();
+            $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([
+                [
+                    $this->getBot()->getOptions()->buttons['finale']
+                ]
+            ]);
 
-            $key = ClaimBotConst::STEP_FINALE;
+            $message->setKeyboardMarkup($keyboard);
         } else {
-            $key = $this->getContact()->step . '.error';
+            $step = $this->getContact()->step . '.error';
         }
 
-        $this->getBot()->sendMessage($this->getUserId(), $key, null, [
+        $message->setMessageView($step)->setAttributes([
             'phone' => $text,
             'contact' => $this->getContact(),
         ]);
+
+        $this->getBot()->sendMessage($message);
 
         $googleSheet = new GoogleSheet(
             SettingsService::load('claim/google_sheet', GoogleSheetDto::class)
@@ -96,22 +115,20 @@ class MessageCommand extends \app\bot\models\Command
 
     public function finale()
     {
-        $this->addButton();
+        $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup([
+            [
+                $this->getBot()->getOptions()->buttons['finale']
+            ]
+        ]);
 
-        $this->getBot()->sendMessage($this->getUserId(), ClaimBotConst::STEP_FINALE, null, [
+        $message = $this->getBot()->getNewMessage();
+
+        $message->setKeyboardMarkup($keyboard)->setMessageView(ClaimBotConst::STEP_FINALE)->setAttributes([
             'contact' => $this->getContact(),
             'phone' => $this->getContact()->phone,
         ]);
-    }
 
-
-    private function addButton()
-    {
-        if (!empty($this->getBot()->getOptions()->buttons['finale'])) {
-            $this->getBot()->setInlineKeyboardMarkup([
-                [$this->getBot()->getOptions()->buttons['finale']]
-            ]);
-        }
+        $this->getBot()->sendMessage($message);
     }
 
 
@@ -122,5 +139,11 @@ class MessageCommand extends \app\bot\models\Command
         }
 
         return $this->_contact;
+    }
+
+
+    private function getSendedContact()
+    {
+        return $this->getBot()->getDataFromRequest()->getMessage()->getContact();
     }
 }
