@@ -1,10 +1,7 @@
 <?php
 /** @var string $userName */
-
-$hello = !empty($userName) ? 'Привет, ' . $userName : 'Привет';
-
 ?>
 
-<?php echo $hello; ?>.
+Привіт! Тебе вітає компанія VIP call-center ☺️
 
-Введите свое имя и фамилию:
+Напишіть будь-ласка прізвище та ім’я!

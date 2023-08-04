@@ -1,12 +1,12 @@
 <?php
-/** @var \app\claimBot\entities\Contact $contact */
+/** @var \app\common\bots\vacancy\entities\Contact $contact */
 ?>
 
-<?php echo $contact->name; ?>, cпасибо за проявленный интерес!
+<?php echo $contact->name; ?>, дякую за реєстрацію!
 
-Вы ввели:
+Ваші дані:
 
-Имя - <code><?php echo $contact->name; ?></code>;
-Телефонный номер - <code><?php echo $contact->phone; ?></code>.
+Ім’я - <code><?php echo $contact->name; ?></code>
+Номер телефону - <code><?php echo $contact->phone; ?></code>.
 
-Мы свяжемся с вами в ближайшее время!
+Тепер для ознайомлення вакансії перейдіть на сайт за посиланням нижче 👇
